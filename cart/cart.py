@@ -17,6 +17,26 @@ class Cart:
     def __len__(self):
         return len(self.cart)
     
+    def cart_total(self):
+        product_ids = self.cart.keys()
+
+        # Lookup keys in DB model
+        products = Product.objects.filter(id__in=product_ids)
+        
+        quantities = self.cart
+
+        total = 0
+        for key, value in quantities.items():
+            key = int(key)
+            for product in products:
+                if product.id == key:
+                    if product.is_sale:
+                        total = total + (product.sale_price * value)
+                    else:
+                        total = total + (product.price * value)
+
+        return total
+
     def add(self, product, quantity):
         product_id = str(product.id)
         product_qty = str(quantity)
@@ -28,6 +48,7 @@ class Cart:
             self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
+
 
     def update(self, product, quantity):
         product_id = str(product)
@@ -48,7 +69,7 @@ class Cart:
             del self.cart[product_id]
 
         self.session.modified = True
-    
+
     def get_prods(self):
         # Get IDs 
         product_ids = self.cart.keys()
