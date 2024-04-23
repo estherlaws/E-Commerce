@@ -22,6 +22,10 @@ def category(request, foo):
     except:
         messages.success(request, ("That category doesn't exist... Yet."))
         return redirect("home")
+    
+def category_summary(request):
+    categories = Category.objects.all()
+    return render(request, "category_summary.html", {"categories": categories})
 
 def product(request, pk):
     product = Product.objects.get(id=pk)
