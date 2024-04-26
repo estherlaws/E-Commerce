@@ -23,29 +23,6 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-    
-# Creates Customer Profile
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    date_modified = models.DateTimeField(User, auto_now=True)
-    phone = models.CharField(max_length=20, blank=True)
-    address1 = models.CharField(max_length=200, blank=True)
-    address2 = models.CharField(max_length=200, blank=True)
-    city = models.CharField(max_length=200, blank=True)
-    state = models.CharField(max_length=200, blank=True)
-    zipcode = models.CharField(max_length=200, blank=True)
-    country = models.CharField(max_length=200, blank=True)
-
-    def __str__(self):
-        return self.user.username
-
-# Create User Profile When User Signs Up
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        user_profile = Profile(user=instance)
-        user_profile.save()
-
-post_save.connect(create_profile, sender=User)
 
 # Products
 class Product(models.Model):
@@ -61,7 +38,32 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+# Creates User Profile
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_modified = models.DateTimeField(User, auto_now=True)
 
+    phone = models.CharField(max_length=20, blank=True)
+    address1 = models.CharField(max_length=200, blank=True)
+    address2 = models.CharField(max_length=200, blank=True)
+    city = models.CharField(max_length=50, blank=True)
+    state = models.CharField(max_length=20, blank=True)
+    zipcode = models.CharField(max_length=5, blank=True)
+    country = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return self.user.username
+    
+# User Profile Created Upon Registration
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+
+# Automates Profile Creation
+post_save.connect(create_profile, sender=User)
+    
 # Customer Orders
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

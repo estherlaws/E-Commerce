@@ -52,12 +52,12 @@ class SignUpForm(UserCreationForm):
         )
 
         self.fields["password2"].widget.attrs["class"] = "form-control"
-        self.fields["password2"].widget.attrs["placeholder"] = "Password"
+        self.fields["password2"].widget.attrs["placeholder"] = "Re-Enter Password"
         self.fields["password2"].label = ""
         self.fields["password2"].help_text = (
-            "<ul class=\"form-text text-muted small\"><li>Your password shouldn't contain any personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can't be a commonly used password.</li><li>Your password can't be entirely numeric.</li></ul>"
+            "<ul class=\"form-text text-muted small\"></ul>"
         )
-  
+
 class UpdateUserForm(UserChangeForm):
     # Prevents password functionality
     password = None
@@ -103,14 +103,12 @@ class UpdateUserForm(UserChangeForm):
             '<span class="form-text text-muted"><small>Required</small></span>'
         )
 
+
 class ChangePasswordForm(SetPasswordForm):
     class Meta:
         model = User
-        fields = (
-            "new_password1", 
-            "new_password2"
-            )
-        
+        fields = ("new_password1", "new_password2")
+
     def __init__(self, *args, **kwargs):
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
 
@@ -125,15 +123,62 @@ class ChangePasswordForm(SetPasswordForm):
         self.fields["new_password2"].widget.attrs["placeholder"] = "Re-Enter Password"
         self.fields["new_password2"].label = ""
 
-class UserInfoForm(forms.ModelForm):
-	phone = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Phone"}), required=False)
-	address1 = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Address 1"}), required=False)
-	address2 = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Address 2"}), required=False)
-	city = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"City"}), required=False)
-	state = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"State"}), required=False)
-	zipcode = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Zipcode"}), required=False)
-	country = forms.CharField(label="", widget=forms.TextInput(attrs={"class":"form-control", "placeholder":"Country"}), required=False)
+from django import forms
+from .models import Profile
 
-	class Meta:
-		model = Profile
-		fields = ("phone", "address1", "address2", "city", "state", "zipcode", "country")
+class UserInfoForm(forms.ModelForm):
+    phone = forms.CharField(
+        label="",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone"}),
+        required=False,
+    )
+    address1 = forms.CharField(
+        label="",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Address 1"}
+        ),
+        required=False,
+    )
+    address2 = forms.CharField(
+        label="",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Address 2"}
+        ),
+        required=False,
+    )
+    city = forms.CharField(
+        label="",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "City"}),
+        required=False,
+    )
+    state = forms.CharField(
+        label="",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "State"}),
+        required=False,
+    )
+    zipcode = forms.CharField(
+        label="",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Zipcode"}
+        ),
+        required=False,
+    )
+    country = forms.CharField(
+        label="",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Country"}
+        ),
+        required=False,
+    )
+
+    class Meta:
+        model = Profile
+        fields = (
+            "phone",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zipcode",
+            "country",
+        )

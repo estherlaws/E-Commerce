@@ -71,8 +71,8 @@ def register_user(request):
             # Log In User
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, ("You have registered successfully."))
-            return redirect("home")
+            messages.success(request, ("Account created. Please fill out user profile below."))
+            return redirect("update_info")
         else:
             messages.success(
                 request, ("There was an issue registering. Please try again.")
@@ -100,12 +100,11 @@ def update_user(request):
 def update_info(request):
     if request.user.is_authenticated:
         current_user = Profile.objects.get(user_id=request.user.id)
-        form = UpdateUserForm(request.POST or None, instance=current_user)
+        form = UserInfoForm(request.POST or None, instance=current_user)
 
         if form.is_valid():
             form.save()
-
-            messages.success(request, "Your info has been updated.")
+            messages.success(request, "Your information has been updated.")
             return redirect("home")
         return render(request, "update_info.html", {"form":form})
     else:
