@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Product, Category
+from .models import Product, Category, Profile
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 def category(request, foo):
@@ -96,6 +96,9 @@ def update_user(request):
     else:
         messages.success(request,"You must be logged in to update profile.")
         return redirect("home")
+    
+def update_info(request):
+    pass
     
 def update_password(request):
     if request.user.is_authenticated:

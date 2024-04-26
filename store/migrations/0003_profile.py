@@ -2,7 +2,6 @@
 
 import django.contrib.auth.models
 import django.db.models.deletion
-import store.custom_fields
 from django.conf import settings
 from django.db import migrations, models
 
@@ -32,7 +31,7 @@ class Migration(migrations.Migration):
                         auto_now=True, verbose_name=django.contrib.auth.models.User
                     ),
                 ),
-                ("phone", store.custom_fields.FormattedPhoneNumberField(max_length=14)),
+                ("phone", models.CharField(blank=True, max_length=20)),
                 ("address1", models.CharField(blank=True, max_length=200)),
                 ("address2", models.CharField(blank=True, max_length=200)),
                 ("city", models.CharField(blank=True, max_length=200)),
