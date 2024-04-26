@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .models import Product, Category
-from .forms import SignUpForm, UpdateUserForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 def category(request, foo):
     # Replace hyphens with spaces
@@ -96,3 +96,27 @@ def update_user(request):
     else:
         messages.success(request,"You must be logged in to update profile.")
         return redirect("home")
+    
+def update_password(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+
+        # Verifies if user filled out form
+        if request.method == "POST":
+            form = ChangePasswordForm(current_user, request.POST)
+
+            # Is form valid
+            if form.is_valid():
+                form.save()
+                messages.success(request,"Your password has been updated.")
+                login(request, current_user)
+                return redirect("update_user")
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+
+        else:
+            form = ChangePasswordForm(current_user)
+            return render(request, "update_password.html", {"form":form})
+    else:
+            messages.success(request, "You must be logged in to update password.")
