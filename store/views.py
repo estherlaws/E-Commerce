@@ -9,6 +9,9 @@ from django import forms
 from .models import Product, Category, Profile
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
+
 def category(request, foo):
     # Replace hyphens with spaces
     foo = foo.replace("-", " ")
@@ -111,15 +114,21 @@ def update_user(request):
         return redirect("home")
     
 def update_info(request):
+    # Get Current User Information
     if request.user.is_authenticated:
         current_user = Profile.objects.get(user__id=request.user.id)
-        form = UserInfoForm(request.POST or None, instance=current_user)
+        shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
 
-        if form.is_valid():
+        form = UserInfoForm(request.POST or None, instance=current_user)
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
+
+        if form.is_valid() or  shipping_form.is_valid():
             form.save()
+            shipping_form.save()
+            
             messages.success(request, "Your information has been updated.")
             return redirect("home")
-        return render(request, "update_info.html", {"form":form})
+        return render(request, "update_info.html", {"form":form, "shipping_form":shipping_form})
     else:
         messages.success(request,"You must be logged in to update profile.")
         return redirect("home")
