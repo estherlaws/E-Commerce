@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 from django import forms
 from .models import Product, Category, Profile
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
@@ -134,3 +134,20 @@ def update_password(request):
             return render(request, "update_password.html", {"form":form})
     else:
             messages.success(request, "You must be logged in to update password.")
+
+def search(request):
+            # Determine if form has been filled out
+            if request.method == "POST":
+                searched = request.POST["searched"]
+
+                # Eliminates case sensitivity
+                searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched) | Q(category__name__icontains=searched))
+
+                # Test for null
+                if not searched:
+                    messages.success(request, "No search results for that product.")
+                    return render(request, "search.html", {})
+                else:
+                    return render(request, "search.html", {"searched":searched})
+            else:
+                return render(request, "search.html", {})
