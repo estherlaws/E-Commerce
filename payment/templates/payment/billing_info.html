@@ -6,8 +6,8 @@
 <header class="bg-dark py-5">
   <div class="container px-4 px-lg-5 my-5">
     <div class="text-center text-white">
-      <h1 class="display-4 fw-bolder">Checkout</h1>
-      <p class="lead fw-normal text-white-50 mb-0">Review Your Order</p>
+      <h1 class="display-4 fw-bolder">Billing Information</h1>
+      <p class="lead fw-normal text-white-50 mb-0">Update Your Payment Information</p>
     </div>
   </div>
 </header>
@@ -35,9 +35,11 @@
 
             <small>Quantity:
               {% for key, value in quantities.items %}
+
               {% if key == product.id|slugify %}
-              {{ value}}
+                {{ value}}
               {% endif%}
+
               {% endfor %}</small>
             <br></br>
 
@@ -55,14 +57,40 @@
             Shipping Information
           </div>
           <div class="card-body">
-            <form method="POST" action="{% url "billing_info" %}">
-              {% csrf_token %}
-              {{ shipping_form.as_p }}
+              {{ shipping_info.shipping_full_name }}
+        <br>
+              {{ shipping_info.shipping_email }}
+        <br>
+              {{ shipping_info.shipping_address1 }}
+        <br>
+              {{ shipping_info.shipping_address2 }}
+        <br>
+              {{ shipping_info.shipping_city }}
+        <br>
+              {{ shipping_info.shipping_state }}
+        <br>
+              {{ shipping_info.shipping_zipcode }}
+        <br>
+              {{ shipping_info.shipping_country }}
+        <br></br>
+              <a href="{% url "checkout" %}" class="btn btn-outline-secondary">Update Shipping</a>
           </div>
         </div>
         <br></br>
-        <button type="submit" class="btn btn-secondary">Continue to Billing</button>
-        </form>
+
+        <div class="card">
+          <div class="card-header">
+            Billing Information
+          </div>
+          <div class="card-body">
+            <form method="POST" action="{% url "process_order" %}">
+              {% csrf_token %}
+            {{ billing_form.as_p }}
+          </div>
+        </div>
+        <br></br>
+        <button type="submit" class="btn btn-secondary">Pay Now</button>
+      </form>
         <br></br>
         </div>
       </div>
