@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <center>
+      <div class="col-8">
+        <h3>Unshipped Orders</h3>
+
+        <table class="table table-striped-columns table-hover table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Order Number</th>
+              <th scope="col">Profit</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">E-Mail</th>
+              <th scope="col">Date Order</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in orders %}
+            <tr>
+              <th scope="row"><a href="{% url "order_details" item.id %}">{{ item.id }}</a></th>
+              <td>${{ item.amount_paid }}</td>
+              <td>{{ item.full_name }}</td>
+              <td>{{ item.email }}</td>
+              <td>{{ item.date_ordered }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+      <center>
+  </div>
+</div>
+
+{% endblock %}

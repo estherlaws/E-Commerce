@@ -358,8 +358,13 @@ caption {
 }
 
 th {
-  text-align: inherit;
+  text-align: center;
   text-align: -webkit-match-parent;
+}
+
+th a {
+  color: #000000;
+  text-decoration: none;
 }
 
 thead,
